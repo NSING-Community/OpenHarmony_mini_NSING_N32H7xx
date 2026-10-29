@@ -1,0 +1,16 @@
+# Copyright (c) 2026 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# Builds the HDF configuration blob for N32H7xx EVAL.
+# hdf_driver() invokes hc-gen on hdf.hcs; the generated C source is compiled
+# into the image and parsed by DeviceManagerStart() at boot.
+import("//drivers/hdf_core/adapter/khdf/liteos_m/hdf.gni")
+
+module_name = "hdf_config"
+hdf_driver(module_name) {
+  hcs_sources = [ "hdf.hcs" ]
+
+  # hdf_driver defaults to HDF-internal visibility only; allow the board layer
+  # (which owns main()) to pull this target in.
+  special_visibility = [ "//device/board/Nsing/n32h7xx_eval/liteos_m/board:*" ]
+}

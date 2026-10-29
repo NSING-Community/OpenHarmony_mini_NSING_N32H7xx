@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_n32h7xx_eval": {
+      "module_list": [
+        "//vendor/Nsing/n32h7xx_eval:n32h7xx_eval"
+      ]
+    }
+  },
+  "subsystem": "product_n32h7xx_eval"
+}

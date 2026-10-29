@@ -1,0 +1,19 @@
+# Copyright (c) 2026 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Board-level Kconfig for the NSING N32H7xx EVAL board (LiteOS-M mini).
+#
+# Location matters: kernel/liteos_m/Kconfig does
+#     osource "$(DEVICE_PATH)/Kconfig"
+# and DEVICE_PATH points at device/board/Nsing/n32h7xx_eval/liteos_m,
+# so the file must live in THIS directory (not one level up).
+
+config BOARD_COMPANY_NSING
+    bool "NSING board vendor"
+    help
+      Boards vended by NSING (N32H7xx EVAL etc.).
+
+# Pull in the SoC company Kconfig so that SOC_COMPANY_NSING (and the SoC
+# series/device symbols) become visible to the HDF platform driver BUILD.gn
+# files, which test them with defined(LOSCFG_SOC_COMPANY_NSING).
+source "../../device/soc/Nsing/Kconfig"

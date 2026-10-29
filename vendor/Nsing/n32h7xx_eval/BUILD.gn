@@ -1,0 +1,7 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# Product root target referenced by ohos.build.
+group("n32h7xx_eval") {
+}

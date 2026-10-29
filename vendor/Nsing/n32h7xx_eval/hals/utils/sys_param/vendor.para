@@ -1,0 +1,27 @@
+const.build.characteristics=****
+
+const.product.manufacturer=NSING
+
+const.product.brand=NSING
+
+const.product.name=n32h7xx_eval
+
+const.build.product=n32h7xx_eval
+
+const.product.model=N32H7xx_EVAL
+
+const.software.model=N32H7xx_EVAL
+
+const.product.hardwareversion=1.0
+
+const.product.hardwareprofile="aout:true,display:true"
+
+const.ohos.serial=NsingN32H7xxEval0001
+
+const.product.bootloader.version=bootloader
+
+const.product.cpu.abilist=****
+
+const.product.software.version="OpenHarmony 6.1"
+
+const.product.firstapiversion=1

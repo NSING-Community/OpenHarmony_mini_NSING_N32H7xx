@@ -1,0 +1,14 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# SoC company level Kconfig for NSING (formerly Nations Technologies).
+
+config SOC_COMPANY_NSING
+    bool "NSING Technologies Inc. (N32H7xx vendor)"
+    help
+      NSING is the vendor of the N32H7xx Cortex-M7 MCU family used by this
+      OpenHarmony LiteOS-M mini port. The SoC tree lives under
+      device/soc/Nsing.
+
+# Expose the SoC-series / device symbols.
+source "../../device/soc/Nsing/n32h7xx/Kconfig"

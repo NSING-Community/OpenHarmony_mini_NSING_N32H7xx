@@ -1,0 +1,102 @@
+{
+    "product_name": "n32h7xx_eval",
+    "ohos_version": "OpenHarmony 6.1",
+    "type": "mini",
+    "version": "3.0",
+    "device_company": "Nsing",
+    "board": "n32h7xx_eval",
+    "kernel_type": "liteos_m",
+    "kernel_version": "",
+    "subsystems": [
+        {
+            "subsystem": "applications",
+            "components": [
+                {
+                    "component": "n32h7xx_sample_app",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "kernel",
+            "components": [
+                {
+                    "component": "liteos_m",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "hdf",
+            "components": [
+                {
+                    "component": "hdf_core",
+                    "features": []
+                },
+                {
+                    "component": "drivers_tools",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "hiviewdfx",
+            "components": [
+                {
+                    "component": "hilog_lite",
+                    "features": []
+                },
+                {
+                    "component": "hievent_lite",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "systemabilitymgr",
+            "components": [
+                {
+                    "component": "samgr_lite",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "startup",
+            "components": [
+                {
+                    "component": "bootstrap_lite",
+                    "features": []
+                },
+                {
+                    "component": "init",
+                    "features": [
+                        "init_feature_begetctl_liteos = true"
+                    ]
+                }
+            ]
+        },
+        {
+            "subsystem": "xts",
+            "components": [
+                {
+                    "component": "acts",
+                    "features": []
+                }
+            ]
+        },
+        {
+            "subsystem": "commonlibrary",
+            "components": [
+                {
+                    "component": "utils_lite",
+                    "features": [
+                        "utils_lite_feature_file = true"
+                    ]
+                }
+            ]
+        }
+    ],
+    "third_party_dir": "",
+    "product_adapter_dir": "//vendor/Nsing/n32h7xx_eval/hals"
+}

@@ -1,0 +1,38 @@
+{
+    "name": "@ohos/n32h7xx_sample_app",
+    "description": "N32H7xx EVAL sample application built on the HDF platform interfaces.",
+    "version": "1.0.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "applications/sample/n32h7xx_eval"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "n32h7xx_sample_app",
+        "subsystem": "applications",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "mini"
+        ],
+        "rom": "0KB",
+        "ram": "0KB",
+        "deps": {
+            "components": [
+                "utils_lite",
+                "liteos_m",
+                "hdf_core"
+            ],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [
+                "//applications/sample/n32h7xx_eval/app:app"
+            ],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}

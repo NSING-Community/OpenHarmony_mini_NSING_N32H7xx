@@ -1,0 +1,53 @@
+{
+    "name": "@ohos/hdf_core",
+    "description": "device driver framework",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "drivers/hdf_core"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "hdf_core",
+        "subsystem": "hdf",
+        "features": [
+            "hdf_core_khdf_test_support",
+            "hdf_core_platform_test_support",
+            "hdf_core_platform_rtc_test_support",
+            "hdf_core_default_peripheral_config",
+            "hdf_core_default_hicollie_config",
+            "hdf_core_lite_utils_config"
+        ],
+        "adapted_system_type": [
+            "standard",
+            "small",
+            "mini"
+        ],
+        "rom": "735KB",
+        "ram": "1350KB",
+        "deps": {
+            "components": [
+                "hilog",
+                "c_utils",
+                "init",
+                "ipc",
+                "samgr",
+                "selinux_adapter",
+                "hilog_lite",
+                "hicollie",
+                "bounds_checking_function"
+            ]
+        },
+        "build": {
+            "sub_component": [
+                "//drivers/hdf_core/adapter:uhdf_entry"
+            ],
+            "inner_kits": [],
+            "test": [
+                "//drivers/hdf_core/adapter:uhdf_test_entry"
+            ]
+        }
+    }
+}

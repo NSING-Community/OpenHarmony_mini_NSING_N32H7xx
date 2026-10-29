@@ -1,0 +1,33 @@
+/*
+ * N32H7xx EVAL PWM parameters.
+ *
+ * The wiring is deliberately TWO-PART - see i2c/i2c_config.hcs for the full
+ * explanation. In short: HdfDeviceNodeConstruct() fills device->property with
+ *     HcsGetNodeByMatchAttr(HdfGetHcsRootNode(), deviceInfo->deviceMatchAttr)
+ * (drivers/hdf_core/framework/core/host/src/hdf_device_node.c:287), so a
+ * deviceNode whose deviceMatchAttr is empty gets property == NULL and every
+ * parameter written inside it is silently ignored.
+ *
+ *   device_info/device_info.hcs : pwm0 -> deviceMatchAttr = "n32h7xx_pwm_0"
+ *   this file                   : match_attr = "n32h7xx_pwm_0"; num / channel / timerClkHz
+ *
+ * One node per timer channel. Both channels share GTIMA1, therefore they share
+ * the period; only the duty cycle differs. The service name must be
+ * "HDF_PLATFORM_PWM_<num>" because pwm_if.c builds exactly that string.
+ */
+root {
+    platform {
+        pwm_config_0 {
+            match_attr  = "n32h7xx_pwm_0";
+            num         = 0;            /* PwmOpen(0) */
+            channel     = 1;            /* GTIMA1_CH1 -> PA0 (AF6) */
+            timerClkHz  = 300000000;    /* APB2 150 MHz x 2, see n32_pwm_hw.h */
+        }
+        pwm_config_1 {
+            match_attr  = "n32h7xx_pwm_1";
+            num         = 1;            /* PwmOpen(1) */
+            channel     = 2;            /* GTIMA1_CH2 -> PA1 (AF4) */
+            timerClkHz  = 300000000;
+        }
+    }
+}

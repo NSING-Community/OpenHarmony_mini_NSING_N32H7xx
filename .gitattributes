@@ -1,0 +1,18 @@
+# Normalize line endings on commit: the working tree may be edited on Windows,
+# where editors default to CRLF. Without this, every touched file shows up as a
+# whole-file diff (1919 files in drivers/hdf_core were once rewritten this way).
+* text=auto eol=lf
+
+# Binary assets: never convert.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.hex binary
+*.bin binary
+*.elf binary
+*.o   binary
+*.a   binary
+*.jar binary

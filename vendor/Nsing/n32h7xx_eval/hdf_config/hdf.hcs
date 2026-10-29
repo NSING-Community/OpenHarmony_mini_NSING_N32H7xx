@@ -1,0 +1,19 @@
+/*
+ * N32H7xx EVAL HDF configuration entry point.
+ * hc-gen includes the per-area files and emits one blob.
+ *
+ * Two kinds of file go in here and both are required:
+ *   device_info/device_info.hcs  the host / device / deviceNode tree that says
+ *                                which driver runs where (matched by moduleName)
+ *   <area>/<area>_config.hcs     the parameter nodes, matched by match_attr via
+ *                                each deviceNode's deviceMatchAttr
+ * A deviceNode whose deviceMatchAttr has no matching match_attr node gets
+ * property == NULL and its parameters are ignored.
+ */
+#include "device_info/device_info.hcs"
+#include "i2c/i2c_config.hcs"
+#include "pwm/pwm_config.hcs"
+
+root {
+    module = "Nsing,n32h7xx_eval";
+}

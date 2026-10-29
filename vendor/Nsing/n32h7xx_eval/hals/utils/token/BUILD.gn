@@ -1,0 +1,13 @@
+# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# http://www.apache.org/licenses/LICENSE-2.0
+
+static_library("hal_token_static") {
+  sources = [ "hal_token.c" ]
+
+  include_dirs = [
+    "//base/startup/init/interfaces/hals",
+    "//commonlibrary/utils_lite/include",
+  ]
+  deps = []
+}

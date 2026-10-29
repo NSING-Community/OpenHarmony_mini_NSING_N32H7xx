@@ -1,0 +1,15 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+import("//kernel/liteos_m/liteos.gni")
+
+# Root build target for the board. hb builds
+# //device/board/Nsing/n32h7xx_eval/liteos_m:liteos_m.
+group("liteos_m") {
+  deps = [ "board" ]
+}
+
+config("public") {
+  configs = [ "board:public" ]
+}

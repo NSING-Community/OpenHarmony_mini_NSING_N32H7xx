@@ -1,0 +1,96 @@
+# Copyright (c) 2022-2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//drivers/hdf_core/adapter/uhdf2/uhdf.gni")
+hdf_adapter_path = "."
+
+if (defined(ohos_lite)) {
+  import("hdf_adapter.gni")
+
+  # NSING N32H7xx port fix: a pure-mini target must use the kernel-mode HDF
+  # (khdf/liteos_m). The small-system branch below pulls in uhdf/posix, which
+  # needs user-space hilog headers that a mini image does not have.
+  if (defined(is_mini_system) && is_mini_system) {
+    group("uhdf_entry") {
+      deps = [
+        "$hdf_adapter_path/khdf/liteos_m/osal:hdf_osal_lite",
+        "$hdf_adapter_path/khdf/liteos_m/core:hdf_core",
+        "$hdf_adapter_path/khdf/liteos_m/platform:hdf_platform_lite",
+      ]
+    }
+  } else {
+  group("uhdf_entry") {
+    deps = [
+      "$hdf_adapter_path/uhdf/manager:hdf_core",
+      "$hdf_adapter_path/uhdf/platform:hdf_platform",
+      "$hdf_adapter_path/uhdf/posix:hdf_posix_osal",
+      "$hdf_adapter_path/uhdf/posix/old:hdf_posix",
+      "$hdf_adapter_path/uhdf2/hdi:libhdi",
+      "$hdf_adapter_path/uhdf2/hdi:libhdi_base",
+    ]
+
+    if (hdf_core_lite_utils_config) {
+      deps += [
+        "$hdf_adapter_path/uhdf2/utils:libhdf_utils",
+      ]
+    }
+  }
+  }  # end else (not mini)
+  group("uhdf_test_entry") {
+    deps = [
+      "$hdf_adapter_path/build/test_common:libhdf_test_common",
+      "$hdf_adapter_path/uhdf/test:hdf_test_uhdf",
+    ]
+  }
+} else {
+  group("uhdf_entry") {
+    hdf_framework_path = "./../framework"
+
+    deps = [
+      "$hdf_adapter_path/uhdf2/hdi:libhdi",
+      "$hdf_adapter_path/uhdf2/hdi:libhdi_base",
+      "$hdf_adapter_path/uhdf2/host:libhdf_host",
+      "$hdf_adapter_path/uhdf2/ipc:libhdf_ipc_adapter",
+      "$hdf_adapter_path/uhdf2/manager:hdf_devmgr",
+      "$hdf_adapter_path/uhdf2/manager:hdf_devmgr.cfg",
+      "$hdf_adapter_path/uhdf2/manager:hdf_devmgr.para.dac",
+      "$hdf_adapter_path/uhdf2/manager:hdf_pnp.cfg",
+      "$hdf_adapter_path/uhdf2/platform:libhdf_platform",
+      "$hdf_adapter_path/uhdf2/pub_utils:libpub_utils",
+      "$hdf_adapter_path/uhdf2/utils:libhdf_utils",
+      "$hdf_framework_path/tools/hdf_dbg:hdf_dbg",
+    ]
+
+    if (hdf_core_default_peripheral_config) {
+      deps += [ "./uhdf2/host/peripheral:hdf_peripheral.cfg" ]
+    }
+
+    if (with_sample) {
+      deps += [
+        "$hdf_adapter_path/uhdf2/host/test/unittest/sample1_driver:libsample1_driver",
+        "$hdf_adapter_path/uhdf2/host/test/unittest/sample_driver:libsample_driver",
+      ]
+    }
+  }
+  group("uhdf_test_entry") {
+    testonly = true
+    deps = [
+      "$hdf_adapter_path/build/test_common:libhdf_test_common",
+      "$hdf_adapter_path/uhdf2/hdi/test:unittest",
+      "$hdf_adapter_path/uhdf2/host/test:unittest",
+      "$hdf_adapter_path/uhdf2/osal/test:unittest",
+      "$hdf_adapter_path/uhdf2/shared/test:unittest",
+      "$hdf_adapter_path/uhdf2/test:hdf_test_uhdf",
+    ]
+  }
+}

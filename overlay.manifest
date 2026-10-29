@@ -1,0 +1,13 @@
+drivers/hdf_core/adapter/BUILD.gn
+drivers/hdf_core/adapter/khdf/liteos_m/BUILD.gn
+drivers/hdf_core/adapter/platform/gpio/BUILD.gn
+drivers/hdf_core/adapter/platform/i2c/BUILD.gn
+drivers/hdf_core/adapter/platform/pwm/BUILD.gn
+drivers/hdf_core/adapter/platform/uart/BUILD.gn
+drivers/hdf_core/adapter/platform/gpio/gpio_n32h7xx.c
+drivers/hdf_core/adapter/platform/i2c/i2c_n32h7xx.c
+drivers/hdf_core/adapter/platform/pwm/pwm_n32h7xx.c
+drivers/hdf_core/adapter/platform/uart/uart_n32h7xx.c
+drivers/hdf_core/bundle.json
+drivers/hdf_core/framework/tools/hc-gen/src/bytecode_gen.cpp
+kernel/liteos_m/arch/arm/cortex-m7/gcc/los_dispatch.S

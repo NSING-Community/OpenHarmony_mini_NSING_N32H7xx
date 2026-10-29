@@ -1,0 +1,82 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# Board company root: device/board/Nsing
+# For a real board (device_path contains "/board/"), BOARD_SOC_FEATURE is true and
+# the liteos_m executable pulls BOTH objects/ldflags/libs and include dirs from
+# //device/board/<company>:public. Therefore the linker script (-T board.ld),
+# -nostartfiles/-nostdlib and the runtime libs MUST be declared here so they reach
+# the final firmware link.
+
+import("//kernel/liteos_m/liteos.gni")
+
+# Which XTS suite gets linked into this image. Every suite is its own static
+# library and the whole-archive bracket below is what actually pulls one in, so
+# switching suites needs no recompilation of the suites - just:
+#     hb build -b debug --gn-args build_xts=true --gn-args xts_suite=ActsSamgrTest
+# Available targets (see test/xts/acts/build_lite/BUILD.gn):
+#   ActsCMSISTest ActsDfxFuncTest ActsHieventLiteTest
+#   ActsBootstrapTest ActsParameterTest ActsSamgrTest
+declare_args() {
+  xts_suite = "ActsCMSISTest"
+}
+
+config("public") {
+  # SoC/board header search paths needed by the kernel + board sources.
+  include_dirs = [
+    "//device/soc/Nsing/n32h7xx/liteos_m/include",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+    "//device/board/Nsing/n32h7xx_eval/liteos_m/board/include",
+    "//utils/native/lite/include",
+  ]
+
+  # Linker: use the N32H7 linker script, do not pull in the C runtime startup
+  # (the SoC startup.s is the real entry) or the default libc startup.
+  ldflags = [
+    "-nostartfiles",
+    "-Wl,-T" + rebase_path("//device/soc/Nsing/n32h7xx/liteos_m/board.ld"),
+    "-nostdlib",
+  ]
+
+  libs = [
+    "nosys",
+    "gcc",
+  ]
+
+  if (defined(LOSCFG_LIBC_NEWLIB)) {
+    ldflags -= [ "-nostdlib" ]
+    libs -= [ "nosys" ]
+    libs += [
+      "c",
+      "m",
+    ]
+  }
+
+  # XTS (build_xts=true): every test suite builds into its own static library and
+  # nothing references it, so the whole-archive bracket is what actually pulls the
+  # suite into the image. Without it --gc-sections drops the library and the
+  # SYS_RUN()/TEST_INIT() entries never reach .zInit.
+  #
+  # BOARD_RUN_XTS tells main.c to walk the `test` initcall layer: OHOS_SystemInit()
+  # only walks bsp/device/core/sys_service/sys_feature/run, so a mini system never
+  # invokes the layer hctest registers RUN_TEST_SUITE in.
+  if (build_xts) {
+    defines = [ "BOARD_RUN_XTS=1", "BOARD_XTS_SUITE=\"$xts_suite\"" ]
+    lib_dirs = [ "$root_out_dir/libs" ]
+    ldflags += [
+      "-Wl,--whole-archive",
+      "-lbootstrap",
+      "-lbroadcast",
+      "-lhctest",
+      "-lmodule_${xts_suite}",
+      "-Wl,--no-whole-archive",
+    ]
+  }
+}
+
+group("Nsing") {
+  deps = [ "n32h7xx_eval/liteos_m" ]
+}

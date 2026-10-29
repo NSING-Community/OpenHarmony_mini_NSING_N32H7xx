@@ -1,0 +1,19 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# SoC (device) level Kconfig for the N32H7xx family.
+
+config SOC_SERIES_N32H7
+    bool "N32H7xx series"
+    help
+      N32H7xx Cortex-M7/M4 dual-core series. This port targets the CM7
+      single-core configuration.
+
+config SOC_N32H7XX
+    bool "N32H76x (Cortex-M7)"
+    select SOC_SERIES_N32H7
+    select ARCH_CORTEX_M7
+    select SOC_COMPANY_NSING
+    help
+      N32H76x device (CM7). Selecting this board pulls in the Cortex-M7
+      arch, the NSING SoC company, and the N32H7xx SoC series.

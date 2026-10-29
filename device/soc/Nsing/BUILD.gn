@@ -1,0 +1,22 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# SoC company root: device/soc/Nsing
+# The liteos_m build references //device/soc/<LOSCFG_SOC_COMPANY> which, with no
+# explicit target, resolves to the target named after this directory ("Nsing").
+# That group forwards to the n32h7xx SoC module; config("public") exposes the
+# SoC-wide include directories to the kernel executable.
+
+config("public") {
+  include_dirs = [
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+    "//device/soc/Nsing/n32h7xx/liteos_m/include",
+  ]
+}
+
+group("Nsing") {
+  deps = [ "n32h7xx/liteos_m" ]
+}

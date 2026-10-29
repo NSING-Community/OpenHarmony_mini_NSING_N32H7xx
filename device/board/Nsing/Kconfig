@@ -1,0 +1,12 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# Board company level Kconfig for NSING boards.
+
+config BOARD_COMPANY_NSING
+    bool "NSING board vendor"
+    help
+      Boards vended by NSING (N32H7xx EVAL etc.).
+
+# Pull in the SoC company Kconfig so SOC_* symbols are visible.
+source "../../soc/Nsing/Kconfig"

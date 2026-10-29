@@ -1,0 +1,73 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# N32H7xx standard peripheral driver library.
+# Built as a kernel_module so the board console / HDF platform drivers can link
+# it. --gc-sections keeps the final image small (only referenced .o are linked).
+
+import("//kernel/liteos_m/liteos.gni")
+
+module_name = "n32h7xx_stdperiph"
+
+kernel_module(module_name) {
+  visibility = []
+  visibility = [
+    ":*",
+    "//kernel/liteos_m:*",
+    "..:*",
+    "../..:*",
+    "//device/board/Nsing/*",
+  ]
+  sources = [
+    "src/misc.c",
+    "src/n32h7xx_adc.c",
+    "src/n32h7xx_comp.c",
+    "src/n32h7xx_cordic.c",
+    "src/n32h7xx_crc.c",
+    "src/n32h7xx_dac.c",
+    "src/n32h7xx_dbg.c",
+    "src/n32h7xx_dcmu.c",
+    "src/n32h7xx_dma.c",
+    "src/n32h7xx_dmamux.c",
+    "src/n32h7xx_dsi.c",
+    "src/n32h7xx_dsmu.c",
+    "src/n32h7xx_dvp.c",
+    "src/n32h7xx_eccmon.c",
+    "src/n32h7xx_eth.c",
+    "src/n32h7xx_exti.c",
+    "src/n32h7xx_fdcan.c",
+    "src/n32h7xx_femc.c",
+    "src/n32h7xx_fmac.c",
+    "src/n32h7xx_gpio.c",
+    "src/n32h7xx_i2c.c",
+    "src/n32h7xx_i2s.c",
+    "src/n32h7xx_iwdg.c",
+    "src/n32h7xx_jpeg.c",
+    "src/n32h7xx_lcdc.c",
+    "src/n32h7xx_lptim.c",
+    "src/n32h7xx_lpuart.c",
+    "src/n32h7xx_mdma.c",
+    "src/n32h7xx_mmu.c",
+    "src/n32h7xx_otpc.c",
+    "src/n32h7xx_pwr.c",
+    "src/n32h7xx_rcc.c",
+    "src/n32h7xx_rtc.c",
+    "src/n32h7xx_sdmmc.c",
+    "src/n32h7xx_sdram.c",
+    "src/n32h7xx_shrtim.c",
+    "src/n32h7xx_smu.c",
+    "src/n32h7xx_spi.c",
+    "src/n32h7xx_tim.c",
+    "src/n32h7xx_usart.c",
+    "src/n32h7xx_vrefbuf.c",
+    "src/n32h7xx_wwdg.c",
+    "src/n32h7xx_xspi.c",
+  ]
+
+  include_dirs = [ "inc" ]
+}
+
+config("public") {
+  include_dirs = [ "inc" ]
+}

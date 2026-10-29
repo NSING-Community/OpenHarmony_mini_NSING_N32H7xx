@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Nsing Technologies (NSING, formerly Nations). All rights reserved.
+#
+# N32H7xx SoC-level build config (informational).
+#
+# NOTE: the authoritative config read by the build system is the BOARD-level
+# file at device/board/Nsing/n32h7xx_eval/liteos_m/config.gni. This SoC-level
+# file only documents the SoC include dirs / defines so a standalone SoC build
+# or future boards reusing this SoC can share them.
+
+kernel_type = "liteos_m"
+board_cpu = "cortex-m7"
+board_arch = "armv7e-m"
+
+board_include_dirs = [
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/liteos_m/include",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+]

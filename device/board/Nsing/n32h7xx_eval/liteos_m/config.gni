@@ -1,0 +1,82 @@
+# Copyright (c) 2026 Nsing Technologies (NSING, formerly Nations). All rights reserved.
+#
+# N32H7xx EVAL board configuration for OpenHarmony 6.1 mini (LiteOS-M).
+# This is the authoritative config read by `hb set` / the build system.
+# SoC tree: device/soc/Nsing/n32h7xx  (board_adapter_dir below).
+
+# Kernel type, e.g. "linux", "liteos_a", "liteos_m".
+kernel_type = "liteos_m"
+
+# Kernel version.
+kernel_version = ""
+
+# Board CPU type, e.g. "cortex-m7".
+board_cpu = "cortex-m7"
+
+# Board arch, e.g. "armv7e-m".
+board_arch = "armv7e-m"
+
+# Toolchain: arm-none-eabi-gcc (same ISA/FPU as the Nations SDK GCC examples).
+board_toolchain = "arm-none-eabi-gcc"
+
+# Toolchain path installed; leave empty if already on PATH.
+board_toolchain_path = ""
+
+# Compiler prefix.
+board_toolchain_prefix = "arm-none-eabi-"
+
+# Compiler type, "gcc" or "clang".
+board_toolchain_type = "gcc"
+
+# Board related common compile flags.
+# -mcpu=cortex-m7 + fpv5-d16 hard-float must match every library in the link.
+# -ffunction-sections/-fdata-sections pair with --gc-sections (see board_ld_flags).
+board_cflags = [
+  "-mcpu=cortex-m7",
+  "-mthumb",
+  "-mfpu=fpv5-d16",
+  "-mfloat-abi=hard",
+  "-O2",
+  "-ffunction-sections",
+  "-fdata-sections",
+  "-DN32H78x",
+  "-DCORE_CM7",
+  "-DUSE_STDPERIPH_DRIVER",
+  # NOTE: OS_SYS_CLOCK drives the LiteOS-M SysTick rate (OS_SYS_CLOCK / tick_per_sec).
+  # The default in los_config.h is 1 MHz which is wrong for N32H7. It MUST equal the
+  # real HCLK produced by RCC_SetSysClkToMode0(). 200 MHz is a PLACEHOLDER — verify the
+  # actual Mode0 frequency from the NSING SDK / reference manual and correct it.
+  # A wrong value only affects timing accuracy, not whether the board boots.
+  "-DOS_SYS_CLOCK=600000000",
+]
+board_cxx_flags = board_cflags
+
+# Assembler flags (used by the SoC startup .s via `asmflags = board_asmflags`).
+board_asmflags = [
+  "-mcpu=cortex-m7",
+  "-mthumb",
+]
+
+board_ld_flags = [
+  "-Wl,--gc-sections",            # pairs with -ffunction-sections/-fdata-sections
+  "-Wl,-Map=n32h7xx.map",         # optional: link map for layout debugging
+]
+
+# Board related headfile search paths.
+board_include_dirs = [
+  "${ohos_root_path}commonlibrary/utils_lite/include",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/liteos_m/include",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+  "${ohos_root_path}device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+  "${ohos_root_path}utils/native/lite/include",
+]
+
+# Board adapter dir for OHOS components (points at the SoC tree).
+board_adapter_dir = "//device/soc/Nsing"
+
+# Sysroot path.
+board_configed_sysroot = ""
+
+# Board storage type, used for file system generation.
+storage_type = ""

@@ -1,0 +1,39 @@
+NSING N32H7xx OpenHarmony mini port - licensing notes
+====================================================
+
+This repository contains code under more than one license. The file headers are
+authoritative; this note explains which set each file belongs to.
+
+1. Written by NSING  ->  BSD-3-Clause (see LICENSE)
+   Files under:
+     device/soc/Nsing/n32h7xx/liteos_m/         (except the files listed in 3)
+     device/board/Nsing/n32h7xx_eval/           (except the files listed in 3)
+     vendor/Nsing/n32h7xx_eval/
+     applications/sample/n32h7xx_eval/
+     docs_Nsing/
+     tools/
+
+2. Derived from OpenHarmony  ->  Apache-2.0 (headers kept unchanged)
+   Modified files inside upstream repositories, listed exhaustively in
+   overlay.manifest:
+     drivers/hdf_core/adapter/BUILD.gn
+     drivers/hdf_core/adapter/khdf/liteos_m/BUILD.gn
+     drivers/hdf_core/adapter/platform/{gpio,i2c,pwm,uart}/BUILD.gn
+     drivers/hdf_core/adapter/platform/{gpio,i2c,pwm,uart}/*_n32h7xx.c   (new, Apache-2.0 style)
+     drivers/hdf_core/bundle.json
+     drivers/hdf_core/framework/tools/hc-gen/src/bytecode_gen.cpp
+     kernel/liteos_m/arch/arm/cortex-m7/gcc/los_dispatch.S
+   These files must keep their original Apache-2.0 terms. A derivative work
+   cannot be relicensed by the party that modified it.
+
+3. Vendor SDK content  ->  original Nations license (headers kept unchanged)
+     device/soc/Nsing/n32h7xx/firmware/                 (CMSIS + std_periph_driver)
+     device/soc/Nsing/n32h7xx/liteos_m/board.ld         (derived from the SDK linker script)
+     device/soc/Nsing/n32h7xx/liteos_m/src/startup_*.s  (derived from the SDK startup files)
+     device/soc/Nsing/n32h7xx/liteos_m/src/system_n32h7xx.c
+   These carry Nations Technologies copyright and distribution terms in their
+   own headers. They are redistributed here for use with NSING/Nations parts.
+   Redistribution outside that scope requires permission from Nations.
+
+No file's copyright header was rewritten by this project. If a unified license
+is required later, it must be applied only where NSING owns the copyright.

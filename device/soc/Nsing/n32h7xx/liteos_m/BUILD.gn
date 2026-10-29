@@ -1,0 +1,46 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# N32H7xx SoC build for OpenHarmony LiteOS-M (mini).
+# Provides: reset/startup code (startup_n32h78x_cm7_gcc.s) and SystemInit
+# (system_n32h7xx.c), plus the SoC public include paths consumed by the
+# kernel executable via //device/soc/<LOSCFG_SOC_COMPANY>:public.
+#
+# Design note: the SDK startup's flash vector table routes the SysTick slot to
+# N32SysTick_Handler (an empty function in system_n32h7xx.c). This is harmless
+# because LiteOS-M's HalHwiInit() repoints SCB->VTOR to its own RAM hwiForm
+# table (with the real arch SysTick_Handler) during LOS_KernelInit, BEFORE the
+# kernel timer is started. So the SDK startup file is used verbatim.
+
+import("//kernel/liteos_m/liteos.gni")
+
+module_name = "soc_config"
+
+kernel_module(module_name) {
+  asmflags = board_asmflags
+
+  sources = [
+    "src/startup_n32h78x_cm7_gcc.s",
+    "src/system_n32h7xx.c",
+    "src/n32_i2c_hw.c",
+    "src/n32_pwm_hw.c",
+    "src/n32_adc_hw.c",
+  ]
+
+  include_dirs = [
+    "include",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+  ]
+}
+
+config("public") {
+  include_dirs = [
+    "include",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+  ]
+}

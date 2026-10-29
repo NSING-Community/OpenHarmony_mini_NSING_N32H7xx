@@ -1,0 +1,116 @@
+/*
+ * N32H7xx EVAL HDF device tree (host / device / deviceNode).
+ *
+ * Consumed by DeviceManagerStart() during the MODULE_INIT(device) phase:
+ *   host  -> one HDF host thread
+ *   device-> a driver module (matched by moduleName)
+ *   node  -> one instance, with its service name and hcs match attribute
+ *
+ * Currently configured on platform_host: the console UART, the GPIO
+ * controller, the I2C manager and one I2C controller (I2C1).
+ *
+ * Parameters (port, speed, ...) do NOT belong in here - put them in the
+ * matching <area>_config.hcs and name it through deviceMatchAttr.
+ */
+root {
+    device_info {
+        match_attr = "hdf_manager";
+        template host {
+            hostName = "";
+            priority = 100;
+            template device {
+                template deviceNode {
+                    policy = 0;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0664;
+                    moduleName = "";
+                    serviceName = "";
+                    deviceMatchAttr = "";
+                }
+            }
+        }
+        platform_host :: host {
+            hostName = "platform_host";
+            priority = 100;
+            uart_device :: device {
+                uart0 :: deviceNode {
+                    policy = 2;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "NSING_UART_MODULE_HDF";
+                    serviceName = "HDF_PLATFORM_UART_0";
+                    deviceMatchAttr = "";
+                }
+            }
+            i2c_manager :: device {
+                i2c_mgr0 :: deviceNode {
+                    /* The framework I2C manager must come up before any controller:
+                       I2cCntlrAdd() -> I2cManagerAddCntlr() dereferences g_i2cManager,
+                       which only exists after this node's driver Init() has run.
+                       priority is lower than the controller's so it loads first. */
+                    policy = 2;
+                    priority = 50;
+                    preload = 0;
+                    permission = 0644;
+                    moduleName = "HDF_PLATFORM_I2C_MANAGER";
+                    serviceName = "HDF_PLATFORM_I2C_MANAGER";
+                    deviceMatchAttr = "hdf_platform_i2c_manager";
+                }
+            }
+            i2c_device :: device {
+                i2c0 :: deviceNode {
+                    /* policy = 0: the I2C interface reaches the controller by bus id,
+                       it does not open a device by service name. Matches the upstream
+                       convention for platform controllers (pwm_config.hcs uses
+                       serviceName = "").
+                       deviceMatchAttr points at i2c/i2c_config.hcs, which holds
+                       port/speed - see the note at the top of that file for why the
+                       parameters cannot live here. */
+                    policy = 0;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "NSING_I2C_MODULE_HDF";
+                    serviceName = "";
+                    deviceMatchAttr = "n32h7xx_i2c";
+                }
+            }
+            pwm_device :: device {
+                pwm0 :: deviceNode {
+                    /* policy = 2: PwmOpen() looks the device up by service name,
+                       "HDF_PLATFORM_PWM_<num>" (pwm_if.c:PwmGetDevByNum), so the
+                       service must be published here. */
+                    policy = 2;
+                    priority = 110;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "NSING_PWM_MODULE_HDF";
+                    serviceName = "HDF_PLATFORM_PWM_0";
+                    deviceMatchAttr = "n32h7xx_pwm_0";   /* GTIMA1_CH1 -> PA0 */
+                }
+                pwm1 :: deviceNode {
+                    policy = 2;
+                    priority = 111;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "NSING_PWM_MODULE_HDF";
+                    serviceName = "HDF_PLATFORM_PWM_1";
+                    deviceMatchAttr = "n32h7xx_pwm_1";   /* GTIMA1_CH2 -> PA1 */
+                }
+            }
+            gpio_device :: device {
+                gpio0 :: deviceNode {
+                    policy = 2;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "NSING_GPIO_MODULE_HDF";
+                    serviceName = "HDF_PLATFORM_GPIO_0";
+                    deviceMatchAttr = "";
+                }
+            }
+        }
+    }
+}

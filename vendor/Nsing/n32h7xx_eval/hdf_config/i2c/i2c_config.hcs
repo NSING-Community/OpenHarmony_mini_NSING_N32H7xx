@@ -1,0 +1,36 @@
+/*
+ * N32H7xx EVAL I2C controller parameters.
+ *
+ * WHY THIS FILE IS NEEDED - the wiring is deliberately TWO-PART:
+ *
+ *   HdfDeviceNodeConstruct() fills the driver's device->property with
+ *       HcsGetNodeByMatchAttr(HdfGetHcsRootNode(), deviceInfo->deviceMatchAttr)
+ *   (drivers/hdf_core/framework/core/host/src/hdf_device_node.c:287).
+ *
+ *   In other words the parameters are NOT read from the deviceNode that names
+ *   the driver. They are looked up BY MATCH ATTRIBUTE, anywhere in this tree.
+ *   A deviceNode that leaves deviceMatchAttr = "" therefore gets
+ *   property == NULL, every parameter written inside it is silently ignored,
+ *   and the driver can only fall back to its built-in defaults - which looks
+ *   exactly like "the hcs is wired up" while nothing is actually being read.
+ *
+ *   So:
+ *     device_info/device_info.hcs : deviceMatchAttr = "n32h7xx_i2c"  <- says WHICH config
+ *     this file                   : match_attr      = "n32h7xx_i2c"  <- holds the VALUES
+ *
+ *   Same layout as the upstream reference,
+ *   device/soc/hisilicon/hi3518ev300/hdf_config/i2c/i2c_config.hcs.
+ */
+root {
+    platform {
+        i2c_config {
+            match_attr = "n32h7xx_i2c";
+
+            /* I2C1 - the port the AT24 hangs off (PB6 = SCL, PB7 = SDA).
+               The driver's N32I2cGetResource() reads these two; `speed` is
+               accepted but only the 100 kHz timing preset exists so far. */
+            port  = 1;
+            speed = 100000;
+        }
+    }
+}

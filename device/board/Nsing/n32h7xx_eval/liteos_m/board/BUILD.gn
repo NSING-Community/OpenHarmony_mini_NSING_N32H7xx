@@ -1,0 +1,54 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# Licensed under the Apache License, Version 2.0 (the "License").
+# SPDX-License-Identifier: Apache-2.0
+
+# Board board-support package for N32H7xx EVAL.
+# Contains: board main() entry, the early UART console (USART1 @ 115200).
+# The linker script / -nostartfiles / libs are supplied by the board company
+# level config("public") (device/board/Nsing/BUILD.gn) so they reach the final
+# liteos_m executable link.
+
+import("//kernel/liteos_m/liteos.gni")
+
+module_name = "bsp_config"
+
+kernel_module(module_name) {
+  sources = [
+    "src/main.c",
+    "src/uart_console.c",
+    "src/board_print.c",
+    "src/board_led.c",
+  ]
+
+  include_dirs = [
+    "include",
+    "//device/soc/Nsing/n32h7xx/liteos_m/include",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
+    "//kernel/liteos_m/kal/cmsis",
+  ]
+
+  # HDF public config: brings in every include path the HDF interfaces need
+  # (framework/include*, interfaces/inner_api*, khdf osal headers, ...).
+  configs += [ "//drivers/hdf_core/adapter/khdf/liteos_m:hdf_config" ]
+
+  # The console uses the NSING std_periph driver (USART/RCC/GPIO).
+  deps = [
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver:n32h7xx_stdperiph",
+
+    # HDF configuration blob (hcs -> C array) for the device manager.
+    "//vendor/Nsing/n32h7xx_eval/hdf_config:hdf_config",
+  ]
+}
+
+config("public") {
+  include_dirs = [
+    "include",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/device",
+    "//device/soc/Nsing/n32h7xx/firmware/CMSIS/core",
+    "//device/soc/Nsing/n32h7xx/firmware/n32h7xx_std_periph_driver/inc",
+  ]
+}

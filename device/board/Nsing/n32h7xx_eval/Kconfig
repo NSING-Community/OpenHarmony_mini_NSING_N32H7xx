@@ -1,0 +1,15 @@
+# Copyright (c) 2025 NSING Technologies Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# Board level Kconfig for the N32H7xx EVAL board.
+
+config BOARD_N32H7XX_EVAL
+    bool "N32H7xx EVAL board"
+    select SOC_N32H7XX
+    select BOARD_COMPANY_NSING
+    help
+      NSING N32H7xx official evaluation board (CM7). This is the board
+      targeted by the OpenHarmony 6.1 LiteOS-M mini port.
+
+# Expose the board-company / SoC Kconfig symbols.
+source "../Kconfig"

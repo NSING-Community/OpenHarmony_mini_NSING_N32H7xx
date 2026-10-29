@@ -1,0 +1,19 @@
+# Build output (never committed).
+/out/
+
+# Local working data: notes, memory, scratch. Stays on the developer machine.
+/.workbuddy/
+
+# Firmware images. Only the baseline image is tracked; the rest stay local.
+/output/*
+!/output/sdk130/
+
+# Editor / OS noise.
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# scratch dir created by tools/apply-overlay.sh
+.ohos-overlay-backup/
