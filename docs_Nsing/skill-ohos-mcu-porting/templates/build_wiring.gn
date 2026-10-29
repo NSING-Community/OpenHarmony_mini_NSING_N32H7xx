@@ -1,0 +1,23 @@
+# Three places must be wired for a new platform driver. Miss one and the driver
+# either never compiles or never enters the image.
+
+# ---- 1) drivers/hdf_core/adapter/platform/<periph>/BUILD.gn ----
+# hdf_driver("pwm") {
+#   sources = []
+#   if (defined(LOSCFG_SOC_COMPANY_<VENDOR>)) {
+#     sources += [ "<periph>_<chip>.c" ]
+#   }
+#   include_dirs = [ "." ]
+# }
+
+# ---- 2) device/soc/<vendor>/<chip>/liteos_m/BUILD.gn ----
+# kernel_module("soc_config") {
+#   sources = [
+#     ...
+#     "src/<chip>_<periph>_hw.c",   # the shim must be compiled into the image
+#   ]
+# }
+
+# ---- 3) kernel config: vendor/<v>/<p>/kernel_configs/<product>.config ----
+# LOSCFG_DRIVERS_HDF_PLATFORM=y
+# LOSCFG_DRIVERS_HDF_PLATFORM_<PERIPH>=y

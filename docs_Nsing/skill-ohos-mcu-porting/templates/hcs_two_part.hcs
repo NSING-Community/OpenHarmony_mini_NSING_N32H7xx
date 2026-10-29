@@ -1,0 +1,48 @@
+/*
+ * Two-part configuration. Part 1 says WHICH config node to use, part 2 holds
+ * the values, part 3 (hdf.hcs) includes part 2. Miss any of them and the
+ * driver runs with silently-defaulted parameters.
+ *
+ *   drivers/hdf_core/framework/core/host/src/hdf_device_node.c:287
+ *   device->property = HcsGetNodeByMatchAttr(root, deviceInfo->deviceMatchAttr);
+ */
+
+/* ===== part 1: device_info/device_info.hcs ===== */
+root {
+    device_info {
+        platform_host :: host {
+            hostName = "platform_host";
+            priority = 100;
+
+            <periph>_device :: device {
+                <periph>0 :: deviceNode {
+                    /* policy 0: controller opened by bus id (needs a manager node)
+                     * policy 2: service opened by name, serviceName = HDF_PLATFORM_<PERIPH>_0 */
+                    policy = 0;
+                    priority = 100;
+                    preload = 0;
+                    permission = 0660;
+                    moduleName = "<VENDOR>_<PERIPH>_MODULE_HDF";
+                    serviceName = "";
+                    deviceMatchAttr = "<vendor>_<periph>";   /* must not be empty */
+                }
+            }
+        }
+    }
+}
+
+/* ===== part 2: <periph>/<periph>_config.hcs ===== */
+root {
+    platform {
+        <periph>_config {
+            match_attr = "<vendor>_<periph>";   /* identical string to part 1 */
+            num  = 0;
+            port = 0;
+            arg  = 0;
+        }
+    }
+}
+
+/* ===== part 3: hdf_config/hdf.hcs ===== */
+/* #include "device_info/device_info.hcs" */
+/* #include "<periph>/<periph>_config.hcs" */
